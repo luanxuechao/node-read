@@ -206,4 +206,33 @@ someAsyncApiCall(() => {
 
 bar = 1;
 ```
+这是另一个真实存在的例子：
+```code
+const server = net.createServer(() => {}).listen(8080);
 
+server.on('listening', () => {});
+```
+当只有端口被监听时，这个端口应该被立即映射。因此`listening`的回调应该立即被执行，但是这个时候`.on('listening')`的回调函数还没有生成。
+为了解决这个问题,`listening`事件被排在`nextTick()`队列中去执行脚本。这允许用户设置他们想要的任何事件处理程序。
+## `process.nextTick()` VS `setImmediate()`
+对于用户而言，他们两是两个极其类似的调用，但是他们的名字不是一样的。
+- `process.nextTick()`会在在该阶段立即执行
+- `setImmediate()` 触发以下迭代或事件循环的发生。
+
+
+本质上，他们的名字应该交换。`process.nextTick()` 会比`setImmediate()`更快的发生，但这是不可能改变的。如果改变，会破坏npm上许多包。每天都有新的模块生成，这意味着我们每天都在等待，发生更多潜在的破坏。当他们混淆时，名字本身不会改变。
+我们建议开发人员在所有情况下都使用`setimmediate()`，因为它更容易理解。（它会让代码与更广泛的环境（如浏览器js）兼容）
+
+## 为什么会使用`process.nextTick()`
+有以下两点主要原因：
+- 允许用户处理错误，清理任何不需要的资源，或者可能在事件循环继续之前再次尝试请求
+- 有时有必要在调用堆栈解除之后但事件循环继续之前允许回调运行
+
+一个例子是匹配用户的期望。简单的例子：
+```code
+const server = net.createServer();
+server.on('connection', (conn) => { });
+
+server.listen(8080);
+server.on('listening', () => { });
+```
