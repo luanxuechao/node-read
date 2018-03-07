@@ -236,3 +236,41 @@ server.on('connection', (conn) => { });
 server.listen(8080);
 server.on('listening', () => { });
 ```
+比如说`listen()`函数在事件循环开始时运行，但是它的回调是放在`setImmediate()`中。除了主机名被传递外，会立即映射到端口。为了继续进行事件循环，它必须进入`poll`阶段，这个意味着没有任何连接事件会发生在监听事件之前。
+
+另一个例子是运行一个函数构造函数，它可以继承eventemitter，并且它想在构造函数中调用一个事件：
+```code
+const EventEmitter = require('events');
+const util = require('util');
+
+function MyEmitter() {
+  EventEmitter.call(this);
+  this.emit('event');
+}
+util.inherits(MyEmitter, EventEmitter);
+
+const myEmitter = new MyEmitter();
+myEmitter.on('event', () => {
+  console.log('an event occurred!');
+});
+```
+您不能立即从构造函数广播事件，因为脚本不会处理到用户为该事件分配回调的位置。因此，在构造函数本身中，可以使用`process.nexttick()`来设置回调，以在构造函数完成后广播事件，该函数提供预期结果:
+```code
+const EventEmitter = require('events');
+const util = require('util');
+
+function MyEmitter() {
+  EventEmitter.call(this);
+
+  // use nextTick to emit the event once a handler is assigned
+  process.nextTick(() => {
+    this.emit('event');
+  });
+}
+util.inherits(MyEmitter, EventEmitter);
+
+const myEmitter = new MyEmitter();
+myEmitter.on('event', () => {
+  console.log('an event occurred!');
+});
+```
