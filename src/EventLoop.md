@@ -216,8 +216,8 @@ server.on('listening', () => {});
 为了解决这个问题,`listening`事件被排在`nextTick()`队列中去执行脚本。这允许用户设置他们想要的任何事件处理程序。
 ## `process.nextTick()` VS `setImmediate()`
 对于用户而言，他们两是两个极其类似的调用，但是他们的名字不是一样的。
-- `process.nextTick()`会在在该阶段立即执行
-- `setImmediate()` 触发以下迭代或事件循环的发生。
+- `process.nextTick()`会在在该阶段立即执行
+- `setImmediate()` 触发以下迭代或事件循环的发生。
 
 
 本质上，他们的名字应该交换。`process.nextTick()` 会比`setImmediate()`更快的发生，但这是不可能改变的。如果改变，会破坏npm上许多包。每天都有新的模块生成，这意味着我们每天都在等待，发生更多潜在的破坏。当他们混淆时，名字本身不会改变。
