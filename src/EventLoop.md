@@ -57,7 +57,7 @@
  *__备注:__ 技术上,`poll`阶段可以控制计时器什么时候被执行。*
 
  例如，你计划了一个阈值为100ms的计时器，但是你的脚本异步开始读取需要95ms的文件:
-```code
+```js
 const fs = require('fs');
 
 function someAsyncOperation(callback) {
@@ -126,7 +126,7 @@ __poll__ 阶段有两个主要功能：
 与定时器的执行顺序将根据调用的上下文而有所变化。如果两者都在主模块内被调用，那么执行时机将受到流程表现的约束（这可能会受到机器上运行的其他应用程序的影响）。
 
 例如，如果我们运行不在I/O周期内的以下脚本（即主模块），则执行两个定时器的顺序是非确定性的，因为它受流程执行的约束。
-```code
+```js
 // timeout_vs_immediate.js
 setTimeout(() => {
   console.log('timeout');
@@ -147,7 +147,7 @@ timeout
 
 ```
 但是，如果在一个I/O周期内移动这两个调用，则`immediate`回调总是首先执行
-```code
+```js
 // timeout_vs_immediate.js
 const fs = require('fs');
 
@@ -180,7 +180,7 @@ timeout
 
 ### 为什么`process.nextTick()`会被允许
 为什么像这样的方法被包含在node.js中？它的一部分是一个设计理念，即api应该始终是异步的，即使它不是必须的，以此代码片段为例：
-```code
+```js
 function apiCall(arg, callback) {
   if (typeof arg !== 'string')
     return process.nextTick(callback,
@@ -192,7 +192,7 @@ function apiCall(arg, callback) {
 我们正在做的是向用户传递一个错误，但是只有在我们允许剩下的用户代码执行之后。通过使用`process.nexttick()`，我们保证`apicall()`总是在用户代码的其余部分之后并且允许继续进行事件循环之前运行其回调。为了达到这个目的，js调用堆栈被允许展开，然后立即执行提供的回调，允许人对`process.nexttick（）`进行递归调用而不会达到`RangeError`：最大调用堆栈大小超过了v8。
 
 这种理念会导致一些潜在的问题。以此片段为例：
-```code
+```js
 let bar;
 
 // this has an asynchronous signature, but calls callback synchronously
@@ -207,7 +207,7 @@ someAsyncApiCall(() => {
 bar = 1;
 ```
 这是另一个真实存在的例子：
-```code
+```js
 const server = net.createServer(() => {}).listen(8080);
 
 server.on('listening', () => {});
@@ -229,7 +229,7 @@ server.on('listening', () => {});
 - 有时有必要在调用堆栈解除之后但事件循环继续之前允许回调运行
 
 一个例子是匹配用户的期望。简单的例子：
-```code
+```js
 const server = net.createServer();
 server.on('connection', (conn) => { });
 
@@ -239,7 +239,7 @@ server.on('listening', () => { });
 比如说`listen()`函数在事件循环开始时运行，但是它的回调是放在`setImmediate()`中。除了主机名被传递外，会立即映射到端口。为了继续进行事件循环，它必须进入`poll`阶段，这个意味着没有任何连接事件会发生在监听事件之前。
 
 另一个例子是运行一个函数构造函数，它可以继承eventemitter，并且它想在构造函数中调用一个事件：
-```code
+```js
 const EventEmitter = require('events');
 const util = require('util');
 
@@ -255,7 +255,7 @@ myEmitter.on('event', () => {
 });
 ```
 您不能立即从构造函数广播事件，因为脚本不会处理到用户为该事件分配回调的位置。因此，在构造函数本身中，可以使用`process.nexttick()`来设置回调，以在构造函数完成后广播事件，该函数提供预期结果:
-```code
+```js
 const EventEmitter = require('events');
 const util = require('util');
 
