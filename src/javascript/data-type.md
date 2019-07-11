@@ -34,3 +34,48 @@
     - Function
     - Date
     -  ....
+### null
+    null值表示一个空指针对象，表示变量未指向任何对象,即如下:
+     ```code
+     typeof null
+     // "object"
+     ```
+    那么此时我们又该如何判断一个对象是不是null呢？因为typeof方法返回是个object，因此我们无法用typeof来判断,所以我们只能用===来判断？为什么不是==，因为如下：
+    ```code
+     null == undefined
+     // true
+     // 这是设计规范导致
+     ```
+### 解读
+#### null 和 undefined 有什么区别？什么时候时null 什么时候时是undefined？
+1. 在定义一个变量未给其赋值时,它是个undefined。在定义一个变量给他赋值为null,它才是一个null,null值表示一个空指针对象，表示变量未指向任何对象。我们经常可以在手动GC（垃圾回收，后面再说）的时候使用，手动释放内存。
+2. 做加减是转换时
+null是一个表示"无"的对象，转为数值时为0；undefined是一个表示"无"的原始值，转为数值时为NaN
+ ```code
+ Number(null)
+ // 0
+ 1 + null
+ // 1
+ Number(undefined)
+ // NaN
+ 1+undefined
+ // NaN
+```
+#### 隐式转换
+
+用js大家在做判断的时候都会用== 或者===,由于js是弱类型语言，导致我们在使用==时，会做一些隐式转换
+类型相同时，没有类型转换，主要注意NaN不与任何值相等，包括它自己，即NaN !== NaN。
+1. x,y 为null、undefined两者中一个 // 返回true
+2. x、y为Number和String类型时，则转换为Number类型比较
+3. 有Boolean类型时，Boolean转化为Number类型比较
+4. 一个Object类型，一个String或Number类型，将Object类型进行原始转换后，按上面流程进行原始值比较
+
+##### 解读
+1. Object如何得到原始值？
+    
+
+
+    
+
+
+
