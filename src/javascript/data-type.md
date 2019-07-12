@@ -70,8 +70,12 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
 3. 有Boolean类型时，Boolean转化为Number类型比较
 4. 一个Object类型，一个String或Number类型，将Object类型进行原始转换后，按上面流程进行原始值比较
 
-##### 解读
-1. Object如何得到原始值？
+##### 两篇隐式转换很全的文章
+
+1. [你所忽略的js隐式转换](https://juejin.im/post/5a7172d9f265da3e3245cbca)
+
+2. [从++[[]][+[]]+[+[]]==10?深入浅出弱类型JS的隐式转换](https://github.com/jawil/blog/issues/5)
+
     
 
 
