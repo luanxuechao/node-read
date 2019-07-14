@@ -1,9 +1,9 @@
 ## javacript 数据类型
 ### 解读
 1. js的数据类型有哪些，有什么区别
-    
+
     js的数据类型可以分为两大类，一类为基本数据类型，一类为引用数据类型。他们之间区别在于一个为在赋值时一个为值传递，一个为引用传递。值传递即在赋值是传递变量本身的值，引用传递则在赋值时传递该变量的内存地址（即指针，js里弱化了指针的概念，不懂可以补下数据结构）当赋值的变量值发生改变时，值传递互不影响，但引用会跟着改变。
-    
+
     ```note
      示例代码（可直接用浏览器运行）
     ```
@@ -69,6 +69,7 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
 2. x、y为Number和String类型时，则转换为Number类型比较
 3. 有Boolean类型时，Boolean转化为Number类型比较
 4. 一个Object类型，一个String或Number类型，将Object类型进行原始转换后，按上面流程进行原始值比较
+5. 如果 x y 类型相同时 返回 x===y 的结果
 
 ##### 两篇隐式转换很全的文章
 
@@ -76,10 +77,55 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
 
 2. [从++[[]][+[]]+[+[]]==10?深入浅出弱类型JS的隐式转换](https://github.com/jawil/blog/issues/5)
 
-    
+#### object 浅拷贝与深拷贝
+1. 什么是浅拷贝？什么是深拷贝
+浅拷贝的时候如果数据是基本数据类型，那么就如同直接赋值那种，会拷贝其本身，如果除了基本数据类型之外还有一层对象，那么对于浅拷贝而言就只能拷贝其引用，对象的改变会反应到拷贝对象上；但是深拷贝就会拷贝多层，即使是嵌套了对象，也会都拷贝出来。
+   (1) 实现浅拷贝方法
+
+        - Object.assign(target, ...sources)
+        -
+
+        ```code
+        function copy(initalObj){
+             var obj = {};
+            for ( var i in initalObj) {
+                obj[i] = initalObj[i];
+            }
+            return obj;
+        }
+        ```
+   (2) 实现深拷贝
+
+        - JSON.parse(JSON.stringify(tagert))
+            - 此方法会使 object丢失原来的构造函数以及会丢失funtion 类的属性
+        - Object.create()
+        - 代码实现
+        ```code
+            function deepClone(obj){
+                let result = {}
+                function copy(ret,copyObj){
+                for(let key in copyObj){
+                    if(typeof copyObj[key] !== 'object'){
+                        ret[key] = copyObj[key]
+                    }else {
+                        ret[key] ={};
+                        copy(ret[key],copyObj[key])
+                    }
+                }
+                    return ret;
+                }
+                return copy(result,obj);
+            }
+        ```
 
 
-    
 
 
+
+
+
+
+
+#### number
+1. 在不知道浮点数位数时应该怎样判断两个浮点数之和与第三数是否相等（典型题目 0.1+0.2===0.3？）
 
