@@ -117,15 +117,53 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
                 return copy(result,obj);
             }
         ```
+2. 原型与继承
 
+ (1) 对象的属性类型
 
-
-
-
-
-
-
+    1) 数据属性
+        - Configurable 表示该属性是否可以使用delete删除属性从而重新定义属性，能否修改属性的特性 (严格模式下才会有效)
+        - Enumerable 表示该属性是否可以被枚举
+        - Writable 表示能否修改属性的值
+        - value 包含这个属性的value
+    2) 访问器属性
+        - Configurable 表示该属性是否可以使用delete删除属性从而重新定义属性，能否修改属性的特性 (严格模式下才会有效)
+        - Enumerable 表示该属性是否可以被枚举
+        - GET 在读取属性时调用的函数，默认值为undefined
+        - SET 在写入属性时调用的函数，默认值为undefined
+    3) 定义属性的方法
+        - Object.defineProperty() (单个)
+        - Object.defineProperties() (多个属性)
+ (2) 创建对象
+    1) 工厂模式
+     ```code
+    function create(name,age){
+        var o = new Object();
+        o.name = name;
+        o.age = age;
+        return o;
+     }
+    var p1 = create("a",1);
+    var p2 = create("a2",2);
+     ```
+    2) 函数构造模式
+     ```code
+    function Person(name,age){
+        this.name = name;
+        this.age = age;
+     }
+    var p1 = new  Person("a",1);
+    var p2 = new Person("a2",2);
+     ```
+     此时经历4个阶段
+      - 创建一个新对象
+      - 将构造函数的作用域给新的对象（this指向的新的对象）
+      - 执行构造函数中的代码
+      - 返回新的对象
+    弊端
+      当我们使用构造函数去构造新的对象时，无论是对象还是函数都会重新创建一边，相当于新增了存储
 
 #### number
 1. 在不知道浮点数位数时应该怎样判断两个浮点数之和与第三数是否相等（典型题目 0.1+0.2===0.3？）
+    [0.1 + 0.2不等于0.3？为什么JavaScript有这种“骚”操作？](https://juejin.im/post/5b90e00e6fb9a05cf9080dff)
 
