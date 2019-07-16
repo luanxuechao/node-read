@@ -162,6 +162,30 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
       - 返回新的对象
     弊端
       当我们使用构造函数去构造新的对象时，无论是对象还是函数都会重新创建一边，相当于新增了存储
+    3) 原型模式
+    ```code
+    function Person(){
+    }
+    Person.prototype.name ='a';
+    Person.prototype.age =11;
+     Person.prototype.friends =["1","2"]
+    var p1 = new  Person();
+    var p2 = new Person();
+     ```
+    虽然原型模式构造函数有效的解决的内存，但是当我们公用引用类型时，p1 的friends 改变。p2 的friends会跟着改变。所有以下优化版
+    ```code
+    function Person(){
+       this.friends =["1","2"]
+    }
+    Person.prototype.name ='a';
+    Person.prototype.age =11;
+    var p1 = new  Person();
+    var p2 = new Person();
+     ```
+ (3) 原型链
+    1) 什么是原型链
+        每个构造函数都有一个原型对象，原型对象都包含一个指向构造函数的指针，而每个实例都包含一个指向原型对象的指针prototype。那么假如我们让原型对象等于另一个类型的实例。此时原型对象将包含一个指向另一个原型的指针，相应地，另一个原型中野包含着一个指向另一个构造函数的指针。假如另一个原型有事另一个类型的实例，如此层层递进的关系，就是原型链的基本概念。
+
 
 #### number
 1. 在不知道浮点数位数时应该怎样判断两个浮点数之和与第三数是否相等（典型题目 0.1+0.2===0.3？）
