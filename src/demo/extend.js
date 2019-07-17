@@ -15,4 +15,6 @@ SubType.prototype.getSubValue = function() {
 var instance = new SubType();
 console.log(Object.getPrototypeOf(instance))
 console.log(instance.constructor.prototype.constructor  )
-console.log(instance.constructor._proto_)
+console.log(instance.constructor.__proto__)
+console.log(instance.__proto__.__proto__.__proto__)
+console.log(instance.prototype)
