@@ -36,16 +36,16 @@
     -  ....
 ### null
     null值表示一个空指针对象，表示变量未指向任何对象,即如下:
-     ```code
+```code
      typeof null
      // "object"
-     ```
+```
     那么此时我们又该如何判断一个对象是不是null呢？因为typeof方法返回是个object，因此我们无法用typeof来判断,所以我们只能用===来判断？为什么不是==，因为如下：
-    ```code
+```code
      null == undefined
      // true
      // 这是设计规范导致
-     ```
+```
 ### 解读
 #### null 和 undefined 有什么区别？什么时候时null 什么时候时是undefined？
 1. 在定义一个变量未给其赋值时,它是个undefined。在定义一个变量给他赋值为null,它才是一个null,null值表示一个空指针对象，表示变量未指向任何对象。我们经常可以在手动GC（垃圾回收，后面再说）的时候使用，手动释放内存。
@@ -85,7 +85,7 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
         - Object.assign(target, ...sources)
         -
 
-        ```code
+```code
         function copy(initalObj){
              var obj = {};
             for ( var i in initalObj) {
@@ -93,14 +93,14 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
             }
             return obj;
         }
-        ```
+```
    (2) 实现深拷贝
 
         - JSON.parse(JSON.stringify(tagert))
             - 此方法会使 object丢失原来的构造函数以及会丢失funtion 类的属性
         - Object.create()
         - 代码实现
-        ```code
+```code
             function deepClone(obj){
                 let result = {}
                 function copy(ret,copyObj){
@@ -116,7 +116,7 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
                 }
                 return copy(result,obj);
             }
-        ```
+```
 2. 原型与继承
 
  (1) 对象的属性类型
@@ -135,8 +135,9 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
         - Object.defineProperty() (单个)
         - Object.defineProperties() (多个属性)
  (2) 创建对象
+
     1) 工厂模式
-     ```code
+```code
     function create(name,age){
         var o = new Object();
         o.name = name;
@@ -145,16 +146,17 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
      }
     var p1 = create("a",1);
     var p2 = create("a2",2);
-     ```
+```
+
     2) 函数构造模式
-     ```code
+ ```code
     function Person(name,age){
         this.name = name;
         this.age = age;
      }
     var p1 = new  Person("a",1);
     var p2 = new Person("a2",2);
-     ```
+```
      此时经历4个阶段
       - 创建一个新对象
       - 将构造函数的作用域给新的对象（this指向的新的对象）
@@ -163,7 +165,8 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
     弊端
       当我们使用构造函数去构造新的对象时，无论是对象还是函数都会重新创建一边，相当于新增了存储
     3) 原型模式
-    ```code
+
+```code
     function Person(){
     }
     Person.prototype.name ='a';
@@ -171,9 +174,9 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
      Person.prototype.friends =["1","2"]
     var p1 = new  Person();
     var p2 = new Person();
-     ```
+```
     虽然原型模式构造函数有效的解决的内存，但是当我们公用引用类型时，p1 的friends 改变。p2 的friends会跟着改变。所有以下优化版
-    ```code
+```code
     function Person(){
        this.friends =["1","2"]
     }
@@ -181,7 +184,7 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
     Person.prototype.age =11;
     var p1 = new  Person();
     var p2 = new Person();
-     ```
+ ```
  (3) 原型链
     1) 什么是原型链
         每个构造函数都有一个原型对象，原型对象都包含一个指向构造函数的指针，而每个实例都包含一个指向原型对象的指针prototype。那么假如我们让原型对象等于另一个类型的实例。此时原型对象将包含一个指向另一个原型的指针，相应地，另一个原型中野包含着一个指向另一个构造函数的指针。假如另一个原型有事另一个类型的实例，如此层层递进的关系，就是原型链的基本概念。
