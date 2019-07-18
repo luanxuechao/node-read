@@ -175,7 +175,8 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
     var p1 = new  Person();
     var p2 = new Person();
 ```
-    虽然原型模式构造函数有效的解决的内存，但是当我们公用引用类型时，p1 的friends 改变。p2 的friends会跟着改变。所有以下优化版
+    虽然原型模式构造函数有效的解决的内存，但是当我们公用引用类型时，p1 的friends 改变。
+    p2 的friends会跟着改变。所有以下优化版
 ```code
     function Person(){
        this.friends =["1","2"]
@@ -198,7 +199,8 @@ null是一个表示"无"的对象，转为数值时为0；undefined是一个表�
     今天看了一篇blog，重新了解了js的引用传递以及值传递，总结就是所有js的函数都是值传递，
     这个值对于引用类型的来说是拷贝它指向对象或者函数的指针（引用类型是存在堆中），
     但是对于基本类型是存在栈中（指向对象的指针也存在栈中），所以他也是传递值。文章地址如下:
-    [JavaScript深入之参数按值传递](https://github.com/mqyqingfeng/Blog/issues/10)(axdhxyzx这个兄弟解析的也很到位)
+
+[JavaScript深入之参数按值传递](https://github.com/mqyqingfeng/Blog/issues/10)(axdhxyzx这个兄弟解析的也很到位)
 
 
 #### number
