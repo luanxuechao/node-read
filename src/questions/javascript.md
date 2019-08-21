@@ -40,3 +40,122 @@ console.log(['1.1', '2', '0.3'].map(parse))
 1. 直接受对象作为健名（null除外），不接受其他类型的值作为健名
 2. 健名所指向的对象，不计入垃圾回收机制
 3. 不能遍历，方法同get,set,has,delete
+### 请写出下面代码的运行结果
+```code
+async function async1() {
+    console.log('async1 start');
+    await async2();
+    console.log('async1 end');
+}
+async function async2() {
+    console.log('async2');
+}
+console.log('script start');
+setTimeout(function() {
+    console.log('setTimeout');
+}, 0)
+async1();
+new Promise(function(resolve) {
+    console.log('promise1');
+    resolve();
+}).then(function() {
+    console.log('promise2');
+});
+console.log('script end');
+```
+
+```
+console.log('script start');
+ console.log('async1 start');
+  console.log('async2');
+    console.log('promise1');
+    console.log('script end');
+     console.log('async1 end');
+     console.log('promise2');
+      console.log('setTimeout');
+```
+### 变形
+```
+async function async1() {
+    console.log('async1 start');
+    await async2();
+    console.log('async1 end');
+}
+async function async2() {
+    //async2做出如下更改：
+    new Promise(function(resolve) {
+    console.log('promise1');
+    resolve();
+}).then(function() {
+    console.log('promise2');
+    });
+}
+console.log('script start');
+
+setTimeout(function() {
+    console.log('setTimeout');
+}, 0)
+async1();
+
+new Promise(function(resolve) {
+    console.log('promise3');
+    resolve();
+}).then(function() {
+    console.log('promise4');
+});
+
+console.log('script end');
+```
+```
+script start
+async1 start
+promise1
+promise3
+script end
+promise2
+async1 end
+promise4
+setTimeout
+```
+### 变形二
+```
+async function async1() {
+    console.log('async1 start');
+    await async2();
+    //更改如下：
+    setTimeout(function() {
+        console.log('setTimeout1')
+    },0)
+}
+async function async2() {
+    //更改如下：
+	setTimeout(function() {
+		console.log('setTimeout2')
+	},0)
+}
+console.log('script start');
+
+setTimeout(function() {
+    console.log('setTimeout3');
+}, 0)
+async1();
+
+new Promise(function(resolve) {
+    console.log('promise1');
+    resolve();
+}).then(function() {
+    console.log('promise2');
+});
+console.log('script end');
+```
+
+```
+script start
+async1 start
+promise1
+script end
+promise2
+setTimeout3
+setTimeout2
+setTimeout1
+```
