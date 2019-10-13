@@ -21,7 +21,7 @@ function isArguments(value) {
 >判断其是一个Object 并且是一个Arguments对象
 
 ### isNumber
-
+#### lodash 源码
 ```
 function isNumber(value) {
   return typeof value == 'number' ||
@@ -51,50 +51,62 @@ function isInteger(value) {
 
 ### isString
 #### lodash 源码
+```
 function isString(value) {
   const type = typeof value
   return type == 'string' || (type == 'object' && value != null && !Array.isArray(value) && getTag(value) == '[object String]')
 }
+```
 > 检测字符串，除了基本字符串以外还要注意字符串对象
 
 ### isBoolean
 #### lodash 源码
+```
 function isBoolean(value) {
   return
     value === true || value === false ||
     (isObjectLike(value)
      && getTag(value) == '[object Boolean]')
 }
+```
 > 该类型只有两个字面值：true 和 false。同样也需要区分基本的 Boolean 类型以及 Boolean 对象。
 
 ### isSymbol
 #### lodash 源码
+```
 function isSymbol(value) {
   const type = typeof value
   return type == 'symbol' ||
       (isObjectLike(value) &&
        getTag(value) == '[object Symbol]')
 }
+```
 > symbol 不能使用new Symbol
 ### isUndefined
 #### lodash 源码
+```
 function isUndefined(value) {
     return value === undefined;
 }
+```
 >Undefined 类型只有一个值 undefined
 
 ### isNull
 #### lodash 源码
-
+```
 function isNull(value) {
   return value === null
 }
+```
 ### isObject
+#### lodash 源码
+```
 function isObject(value) {
   const type = typeof value
   return value != null &&
       (type == 'object' || type == 'function')
 }
+```
 > Object 类型是所有它的实例的基础
 
 ### isFunction
